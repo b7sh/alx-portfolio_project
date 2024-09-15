@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Track App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Money Track App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary nav-link" href="{{ url_for('add_transaction') }}">Go to App</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Money Track App</h1>
+        <p>Your personal finance tracker</p>
+    </section>
+
+    <section id="features" class="container my-5">
+        <h2 class="text-center mb-4">Key Features</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature">
+                    <img src="static/images/add-transaction.jpg" alt="Add Transaction" class="feature-img">
+                    <h3>Add Transaction</h3>
+                    <p>Quickly add your income and expenses to keep track of your financial health.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature">
+                    <img src="static/images/view-transactions.jpg" alt="View Transactions" class="feature-img">
+                    <h3>View Transactions</h3>
+                    <p>Review and filter your transactions by date, category, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature">
+                    <img src="static/images/summary.jpg" alt="Summary" class="feature-img">
+                    <h3>Financial Summary</h3>
+                    <p>Get an overview of your total income, expenses, and balance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="container my-5">
+        <h2 class="text-center mb-4">About the Project</h2>
+        <p>This project was inspired by a personal challenge I faced with managing my finances. After struggling to track my income and expenses efficiently, I realized I needed a tool that could help me better understand my financial health. During my time at ALX Software Engineering, I decided to turn this personal need into a portfolio project.</p>
+        <p>This is a Portfolio Project for ALX Software Engineering. You can learn more about the ALX program <a href="https://www.alxafrica.com/" target="_blank">here</a>.</p>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Team Members</h3>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/mohammed-abdelbasit-59a5a71a5/" target="_blank"><img width="50" src="static/images/linkedin.jpg" alt="LinkedIn"></a></li>
+                    <li><a href="https://github.com/b7sh" target="_blank"><img width="50" src="static/images/github.jpg" alt="GitHub"></a></li>
+                    <li><a href="https://x.com/b7sh_b7sh" target="_blank"><img width="50" src="static/images/twitter.jpg" alt="Twitter"></a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="https://github.com/b7sh/the_porfolio" class="btn btn-primary" target="_blank">View GitHub Repository</a>
+    </section>
+
+    <section id="video" class="container my-5">
+        <h2 class="text-center mb-4">Project Walkthrough</h2>
+        <video width="100%" controls>
+            <source src="static/videos/project-walkthrough.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p class="text-center mt-3">An introduction to the team, project inspiration, features, and future plans.</p>
+    </section>
+
+    <section id="contact" class="container my-5">
+        <h2 class="text-center mb-4">Contact</h2>
+        <ul>
+            <li><a href="https://github.com/b7sh" target="_blank">GitHub</a></li>
+            <li><a href="https://x.com/b7sh_b7sh" target="_blank">Twitter</a></li>
+        </ul>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Money Track App. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
