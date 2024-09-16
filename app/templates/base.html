@@ -1,44 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags to define character set and ensure responsiveness on different devices -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- The title of the page, which can be dynamically set in different templates using a block -->
-    <title>{% block title %}App{% endblock %}</title>
-
-    <!-- Link to Bootstrap CSS for styling -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-    <!-- Link to a custom CSS file located in the 'static' directory -->
+    <title>{% block title %}Money Track App{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- Navbar using Bootstrap classes for layout and styling -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- Branding (logo or title) that links back to the home page -->
-        <a class="navbar-brand" href="{{ url_for('index') }}">Finance App</a>
-
-        <!-- Button for toggling the navigation menu on smaller screens -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Money Track App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- Collapsible section for navigation links -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Unordered list of navigation links -->
-            <ul class="navbar-nav mr-auto">
-                <!-- Home link, marked as active with Bootstrap's 'active' class -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
                 </li>
-                <!-- Link to the "Add Transaction" page -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('add_transaction') }}">Add Transaction</a>
                 </li>
-                <!-- Link to the "Transactions" page -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('transactions') }}">Transactions</a>
                 </li>
@@ -46,15 +30,23 @@
         </div>
     </nav>
 
-    <!-- Main content section -->
-    <div class="container">
-        <!-- Block for page-specific content, which will be filled in by other templates -->
+    <!-- Main Content -->
+    <div class="container my-4">
+        {% with messages = get_flashed_messages(category_filter=["success", "danger"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ 'success' if 'success' in message else 'danger' }} mt-3">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Bootstrap's JavaScript dependencies for interactivity -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,22 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for
-from models import db, Transaction, add_entry, get_transactions  # Importing necessary models and helper functions
+from flask import Flask, render_template, request, redirect, url_for, flash
+from models import db, Transaction, add_entry, get_transactions, delete_transaction, edit_transaction
+from datetime import datetime
 
-
+# Create an instance of the Flask class for your web application
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Replace with a real secret key for security
 
 # Configure the MySQL database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Boshy%40*500@localhost:3306/finance_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modifications for performance
 
-# Initialize the SQLAlchemy object with the Flask app
+# Initialize the app with SQLAlchemy
 db.init_app(app)
 
-
-@app.before_request
+@app.before_first_request
 def create_tables():
     """
-    This function runs before every request.
-    It ensures that all database tables are created before handling any requests.
+    This function ensures that all the necessary database tables are created
+    before handling any requests by invoking db.create_all() once before the first request.
     """
     db.create_all()
 
@@ -31,45 +32,96 @@ def index():
 @app.route("/add_transaction", methods=["GET", "POST"])
 def add_transaction():
     """
-    This route handles adding a new transaction.
-    If the request method is 'POST', it processes the form data and adds the transaction to the database.
-    If the request method is 'GET', it renders the form page for adding a transaction.
+    This route handles adding a new transaction. It accepts both GET and POST requests.
+    - GET: Displays the form to add a new transaction.
+    - POST: Processes the form data and adds the transaction to the database.
     """
     if request.method == "POST":
-        # Get data from the user
+        # Retrieve form data from the HTML form
         date = request.form["date"]
         amount = request.form["amount"]
         category = request.form["category"]
         description = request.form["description"]
-        # Create a new Transaction object using the form data
+
+        # Create a new transaction object and add it to the database
         transaction = Transaction(date, amount, category, description)
-        # Use the add_entry function to add the transaction to the database
         add_entry(transaction)
-        return redirect(url_for("index"))
+
+        # Show a success message to the user
+        flash('Transaction added successfully!', 'success')
+
+        # Redirect the user to the transactions page
+        return redirect(url_for("transactions"))
+
+    # Render the 'add_transaction.html' template for GET requests
     return render_template("add_transaction.html")
 
 @app.route("/transactions", methods=["GET"])
 def transactions():
     """
-    This route displays all transactions or filters them based on a date range.
-    If 'start_date' and 'end_date' are provided, it fetches transactions within that range.
-    Otherwise, it shows an empty transaction list.
+    This route handles displaying transactions with an optional filter by date range.
+    It renders the 'transactions.html' template and shows the list of transactions, income, expenses, and balance.
     """
-    # Retrieve the start and end date from query parameters
+    # Retrieve optional date range from query parameters
     start_date = request.args.get("start_date")
     end_date = request.args.get("end_date")
+
+    # Validate date range
     if start_date and end_date:
-        # Get transactions, income, expenses, and balance for the given date range
+        if datetime.strptime(start_date, '%Y-%m-%d') > datetime.strptime(end_date, '%Y-%m-%d'):
+            flash('Start date cannot be later than end date!', 'danger')
+            return redirect(url_for('transactions'))
+
+        # Get filtered transactions and financial summary
         transactions, total_income, total_expense, balance = get_transactions(start_date, end_date)
-        # Render the transactions.html template with the filtered data
-        return render_template("transactions.html",
-                                transactions=transactions, 
-                                total_income=total_income, 
-                                total_expense=total_expense, 
-                                balance=balance)
-    # If no date range is provided, render the transactions page with no transactions
+        return render_template("transactions.html", transactions=transactions, total_income=total_income, total_expense=total_expense, balance=balance)
+
+    # Render 'transactions.html' without filtering if no date range is provided
     return render_template("transactions.html", transactions=None)
 
+@app.route("/delete_transaction/<int:id>", methods=["POST"])
+def delete_transaction_view(id):
+    """
+    This route handles deleting a transaction. It accepts POST requests and
+    deletes the transaction with the given ID from the database.
+    """
+    delete_transaction(id)
+    
+    # Show a success message to the user
+    flash('Transaction deleted successfully!', 'success')
 
+    # Redirect to the transactions page
+    return redirect(url_for('transactions'))
+
+@app.route("/edit_transaction/<int:id>", methods=["GET", "POST"])
+def edit_transaction_view(id):
+    """
+    This route handles editing a transaction. It accepts both GET and POST requests.
+    - GET: Displays the form to edit a transaction with the given ID.
+    - POST: Processes the form data and updates the transaction in the database.
+    """
+    # Retrieve the transaction by its ID or show 404 error if not found
+    transaction = Transaction.query.get_or_404(id)
+
+    if request.method == "POST":
+        # Update the transaction object with form data
+        transaction.date = datetime.strptime(request.form["date"], '%Y-%m-%d')
+        transaction.amount = float(request.form["amount"])
+        transaction.category = request.form["category"]
+        transaction.description = request.form["description"]
+
+        # Commit the updated transaction to the database
+        db.session.commit()
+
+        # Show a success message to the user
+        flash('Transaction updated successfully!', 'success')
+
+        # Redirect to the transactions page
+        return redirect(url_for('transactions'))
+
+    # Render the 'edit_transaction.html' template for GET requests
+    return render_template("edit_transaction.html", transaction=transaction)
+
+# Entry point for running the app
 if __name__ == "__main__":
-    app.run(debug=True) # Run the app in debug mode
+    app.run(debug=True)  # Enable debug mode for easier development

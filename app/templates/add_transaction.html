@@ -1,62 +1,53 @@
-{% extends "base.html" %} 
-<!-- This template extends the base.html template, reusing its structure -->
+{% extends "base.html" %}
 
-{% block title %}Add Transactions{% endblock %} 
-<!-- Block to define the title of the page, which will appear in the browser tab -->
+{% block title %}Add Transaction{% endblock %}
 
 {% block content %}
-<!-- Block to define the main content for the page -->
-
-<div class="container my-5">
-    <!-- A container with margin-y of 5 for spacing from Bootstrap -->
-    <h1 class="text-center mb-4">Add Transaction</h1>
-    <!-- Main heading centered and spaced using Bootstrap's text-center and margin-bottom classes -->
-
-    <!-- Form for adding a new transaction, with POST method -->
-    <form method="post" class="p-4 border rounded bg-light shadow-sm">
-        <!-- Padding, border, background, and shadow applied to make the form look neat -->
-
-        <div class="form-row">
-            <!-- Bootstrap form row to align fields side by side -->
-            <div class="form-group col-md-6">
-                <!-- Form group for the Date field, taking up half the row (col-md-6) -->
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" name="date" required>
-                <!-- Input field for the date, with HTML5 'required' attribute -->
-            </div>
-
-            <div class="form-group col-md-6">
-                <!-- Form group for the Amount field, also taking up half the row -->
-                <label for="amount">Amount</label>
-                <input type="number" class="form-control" id="amount" name="amount" required>
-                <!-- Input field for the amount, with required attribute and 'number' type for validation -->
-            </div>
+<h1 class="text-center mb-4">Add Transaction</h1>
+<form method="post" class="p-4 border rounded bg-light shadow-sm" id="addTransactionForm">
+    <div class="form-row">
+        <!-- Date Field -->
+        <div class="form-group col-md-6">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+            <div class="invalid-feedback">Please enter a valid date.</div>
         </div>
-
-        <div class="form-row">
-            <!-- Another row for Category and Description fields -->
-            <div class="form-group col-md-6">
-                <!-- Form group for Category dropdown -->
-                <label for="category">Category</label>
-                <select class="form-control" id="category" name="category" required>
-                    <!-- Dropdown with predefined categories (Income or Expense) -->
-                    <option value="">Select Category</option>
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-6">
-                <!-- Form group for Description textarea -->
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                <!-- Text area for description with 3 rows of space -->
-            </div>
+        <!-- Amount Field -->
+        <div class="form-group col-md-6">
+            <label for="amount">Amount</label>
+            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            <div class="invalid-feedback">Please enter a valid amount.</div>
         </div>
+    </div>
+    <div class="form-row">
+        <!-- Category Field -->
+        <div class="form-group col-md-6">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+            </select>
+            <div class="invalid-feedback">Please select a category.</div>
+        </div>
+        <!-- Description Field -->
+        <div class="form-group col-md-6">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block mt-3">Add Transaction</button>
+</form>
 
-        <!-- Submit button to add the transaction -->
-        <button type="submit" class="btn btn-primary btn-block mt-3">Add Transaction</button>
-    </form>
-</div>
-
+<!-- Client-side Validation Script -->
+<script>
+    const form = document.getElementById('addTransactionForm');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+</script>
 {% endblock %}
