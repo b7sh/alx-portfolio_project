@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modificati
 # Initialize the app with SQLAlchemy
 db.init_app(app)
 
-@app.before_first_request
+@_got_first_request
 def create_tables():
     """
     This function ensures that all the necessary database tables are created
