@@ -124,4 +124,4 @@ def edit_transaction_view(id):
 
 # Entry point for running the app
 if __name__ == "__main__":
-    app.run(debug=True)  # Enable debug mode for easier development
+    app.run(host='0.0.0.0', debug=True)  # Enable debug mode for easier development
